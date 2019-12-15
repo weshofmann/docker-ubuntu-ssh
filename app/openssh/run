@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo
+echo * Starting SSH daemon
+echo
+/usr/sbin/sshd -D 
