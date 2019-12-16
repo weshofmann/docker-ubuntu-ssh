@@ -35,26 +35,47 @@ RUN mkdir -p  /etc/apt/sources.d/ \
 #
 # VOLUME [ "/sys/fs/cgroup" ]
 #
+#
+RUN sed -i 's:^path-exclude=/usr/share/man:#path-exclude=/usr/share/man/:' \
+        /etc/dpkg/dpkg.cfg.d/excludes
+
 RUN apt-get install -y \
-      rsync \
+      manpages \
+      manpages-posix \
+      man-db \
       ssh \
+      syslog-ng \
+      rsync \
+      runit 
+
+RUN apt-get install -y \
       build-essential \
-      runit \
+      manpages-dev \
       git \
       tmux \
       screen \
-      vim
+      vim \
+      rar \
+      unrar \
+      zip \
+      unzip \
+      p7zip-full \
+      par2 \
+      whois \
+      traceroute \
+      nmap \
+      less 
 
-RUN mkdir -p /run/sshd
 
-RUN mkdir -p /app 
+
+
+RUN mkdir -p /app /run/sshd /host_etc
 
 COPY app /app
 
 RUN find /app -name run | xargs chmod a+rx 
 
-
 # RUN apt-get clean \
-#       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+#       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
 
 CMD ["runsvdir", "/app"]

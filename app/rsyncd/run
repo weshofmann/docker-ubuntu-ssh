@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "[RSYNC]"
+echo "[RSYNC] * Starting rsyncd"
+
+/usr/bin/rsync --daemon --no-detach --address 0.0.0.0 --port 873 \
+    --log-file=/var/log/rsyncd.log

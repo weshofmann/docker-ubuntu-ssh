@@ -1,6 +1,16 @@
 #!/bin/sh
 
-echo
-echo * Starting SSH daemon
-echo
-/usr/sbin/sshd -D 
+echo "[SSH]"
+echo "[SSH] * Starting SSH daemon"
+echo "[SSH]   - adding host system users..."
+while IFS=: read user none1 uid gid none2; do 
+  if [ $uid -ge 1000 -a $uid -lt 10000 ]; then
+    echo "[SSH]     - $user ($uid)"
+    /usr/sbin/useradd -d /home/$user -g $gid -M -s /bin/bash $user
+  fi
+done < /host_etc/passwd
+echo "[SSH]   - Starting sshd"
+/usr/sbin/sshd -D \
+    -o "UsePAM no" \
+    -o "PasswordAuthentication no" \
+    -o "PubkeyAuthentication yes" 
